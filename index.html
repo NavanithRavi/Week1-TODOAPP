@@ -1,0 +1,32 @@
+<head>
+    <Title>
+        TODO app
+    </Title>
+</head>
+<script>
+    function onPress(){
+    fetch("http://localhost:3000/put",{
+        method:'POST',
+        body:JSON.stringify({
+            "name":"navanith",
+            "age":21
+        }),
+        headers:{
+        "Content-Type":"application/json"
+        }
+    }).then((result)=>{
+        result.json().then((jsonBody)=>{
+            console.log(jsonBody);
+        })
+    })}
+    window.onload =onPress;
+    
+</script>
+<body>
+    <i>Todo title</i> 
+    <input type="text" id="title"></input>
+    <i>Description</i> 
+    <input type="text" id="title"></input>
+    <button onclick="onPress()">send todo</button>
+    
+</body>
