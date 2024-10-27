@@ -4,29 +4,101 @@
     </Title>
 </head>
 <script>
-    function onPress(){
+    function alertfun(){
+        alert("hi")
+    }
+    function deleteItem(){
+        fetch("http://localhost:3000/delete",{
+            method:'DELETE',
+            body:JSON.stringify({
+            id:3
+        }),
+        headers: {
+        "Content-Type": "application/json"
+    }
+        }).then((resp)=>{
+            resp.text().then((response)=>{
+                getData();
+            })
+        })
+    }
+    function getData(){
     fetch("http://localhost:3000/getList",{
-        method:'GET',
-        // body:JSON.stringify({
-        //     "name":"navanith",
-        //     "age":21
-        // }),
-        // headers:{
-        // "Content-Type":"application/json"
-        // }
-    }).then((result)=>{
+        method:'GET'}
+    ).then((result)=>{
         result.json().then((jsonBody)=>{
-            console.log(jsonBody);
+            // console.log(jsonBody);
+            var parentElement = document.getElementById("mainarea");
+            parentElement.innerHTML='';
+            jsonBody.forEach(element => {
+                var a = document.createElement("div");
+                for(let key in element){
+                    console.log(1);
+                    var c = document.createElement("span");
+                    c.innerHTML=JSON.stringify(element[key]);
+                    a.appendChild(c);
+                }
+                var d = document.createElement("button");
+                d.innerHTML="Delete";
+                d.addEventListener('click',deleteItem);
+                a.appendChild(d);
+                parentElement.appendChild(a);
+            });
         })
     })}
-    window.onload =onPress;
+    function onPress(){
+        var id = document.getElementById("id").value;
+        var title = document.getElementById("title").value;
+        var description = document.getElementById("Description").value;
+    fetch("http://localhost:3000/put",{
+        method:'POST',
+        body:JSON.stringify({
+            "id":id,
+            "title":title,
+            "description":description 
+        }),
+        headers:{
+        "Content-Type":"application/json"
+        }
+    }).then((result)=>{
+        result.text().then((jsonBody)=>{
+            fetch("http://localhost:3000/getList",{
+        method:'GET'}
+    ).then((result)=>{
+        result.json().then((jsonBody)=>{
+            var parentElement = document.getElementById("mainarea");
+            parentElement.innerHTML='';
+            jsonBody.forEach(element => {
+                console.log(1)
+                var a = document.createElement("div");
+                for(let key in element){
+                    console.log(1);
+                    var c = document.createElement("span");
+                    c.innerHTML=JSON.stringify(element[key]);
+                    a.appendChild(c);
+                }
+                var d = document.createElement("button")
+                d.innerHTML="Delete";
+                d.addEventListener('click',deleteItem);
+                a.appendChild(d);
+                parentElement.appendChild(a);
+            });
+        })
+    })
+        })
+    })}
+    window.onload =getData;
     
 </script>
 <body>
-    <i>Todo title</i> 
+    <i>Id</i>
+    <input type="number" id="id"></input>
+    <i>Todo title</i>
     <input type="text" id="title"></input>
     <i>Description</i> 
-    <input type="text" id="title"></input>
+    <input type="text" id="Description"></input>
     <button onclick="onPress()">send todo</button>
-    
+    <div id="mainarea">
+
+    </div>
 </body>

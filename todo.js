@@ -51,14 +51,19 @@ app.put('/update',(req,res)=>{
     })
 });
 app.delete('/delete',(req,res)=>{
+    // console.log("I am inside the delete function");
     var id = req.body.id;
+    console.log(id);
     fs.readFile('file.json','utf-8',(err,data)=>{
         var check = checkFile(data,res);
         if(check===true){
+            // console.log(id);
+            // console.log("I am inside the delete function");
+            // console.log(data);
             var jsonData = JSON.parse(data);
             var index = jsonData.findIndex(value => value.id===id);
             if(index!=-1){
-                console.log(index);
+                console.log("I am inside the delete function");
                 jsonData.splice(index,1);
                 var updatedjson = JSON.stringify(jsonData,null,2);
 
