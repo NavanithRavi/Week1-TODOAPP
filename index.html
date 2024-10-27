@@ -5,15 +5,15 @@
 </head>
 <script>
     function onPress(){
-    fetch("http://localhost:3000/put",{
-        method:'POST',
-        body:JSON.stringify({
-            "name":"navanith",
-            "age":21
-        }),
-        headers:{
-        "Content-Type":"application/json"
-        }
+    fetch("http://localhost:3000/getList",{
+        method:'GET',
+        // body:JSON.stringify({
+        //     "name":"navanith",
+        //     "age":21
+        // }),
+        // headers:{
+        // "Content-Type":"application/json"
+        // }
     }).then((result)=>{
         result.json().then((jsonBody)=>{
             console.log(jsonBody);

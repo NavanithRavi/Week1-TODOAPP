@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require("body-parser")
 const app = express();
 const port = 3000;
+const path = require('path');
 app.use(bodyParser.json());
 app.use(cors());
 function checkFileArray(data){
@@ -117,6 +118,10 @@ app.post('/put',(req,res)=>{
             });
     });
 });
+function page(req,res){
+    res.sendFile(path.join(__dirname, 'index.html'));
+}
+app.get('/',page);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
