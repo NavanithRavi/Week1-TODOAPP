@@ -7,11 +7,11 @@
     function alertfun(){
         alert("hi")
     }
-    function deleteItem(){
+    function deleteItem(id){
         fetch("http://localhost:3000/delete",{
             method:'DELETE',
             body:JSON.stringify({
-            id:3
+            id:id
         }),
         headers: {
         "Content-Type": "application/json"
@@ -40,7 +40,7 @@
                 }
                 var d = document.createElement("button");
                 d.innerHTML="Delete";
-                d.addEventListener('click',deleteItem);
+                d.addEventListener('click', () => deleteItem(element.id));
                 a.appendChild(d);
                 parentElement.appendChild(a);
             });
@@ -72,14 +72,14 @@
                 console.log(1)
                 var a = document.createElement("div");
                 for(let key in element){
-                    console.log(1);
+                
                     var c = document.createElement("span");
                     c.innerHTML=JSON.stringify(element[key]);
                     a.appendChild(c);
                 }
                 var d = document.createElement("button")
                 d.innerHTML="Delete";
-                d.addEventListener('click',deleteItem);
+                d.addEventListener('click', () => deleteItem(element.id));
                 a.appendChild(d);
                 parentElement.appendChild(a);
             });
