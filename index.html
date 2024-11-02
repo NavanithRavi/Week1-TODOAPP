@@ -4,10 +4,11 @@
     </Title>
 </head>
 <script>
+     var i=0;
     function alertfun(){
         alert("hi")
     }
-    function deleteItem(id){
+    function deleteItem(id,del){
         fetch("http://localhost:3000/delete",{
             method:'DELETE',
             body:JSON.stringify({
@@ -18,7 +19,9 @@
     }
         }).then((resp)=>{
             resp.text().then((response)=>{
-                getData();
+                var parentElement = document.getElementById("mainarea");
+                var child = document.getElementById(del);
+                parentElement.removeChild(child);
             })
         })
     }
@@ -27,11 +30,12 @@
         method:'GET'}
     ).then((result)=>{
         result.json().then((jsonBody)=>{
-            // console.log(jsonBody);
+            
             var parentElement = document.getElementById("mainarea");
             parentElement.innerHTML='';
             jsonBody.forEach(element => {
                 var a = document.createElement("div");
+                a.id="child"+i
                 for(let key in element){
                     console.log(1);
                     var c = document.createElement("span");
@@ -40,7 +44,7 @@
                 }
                 var d = document.createElement("button");
                 d.innerHTML="Delete";
-                d.addEventListener('click', () => deleteItem(element.id));
+                d.addEventListener('click', () => deleteItem(element.id,a.id));
                 a.appendChild(d);
                 parentElement.appendChild(a);
             });
@@ -61,42 +65,57 @@
         "Content-Type":"application/json"
         }
     }).then((result)=>{
-        result.text().then((jsonBody)=>{
-            fetch("http://localhost:3000/getList",{
-        method:'GET'}
-    ).then((result)=>{
         result.json().then((jsonBody)=>{
             var parentElement = document.getElementById("mainarea");
-            parentElement.innerHTML='';
-            jsonBody.forEach(element => {
-                console.log(1)
-                var a = document.createElement("div");
-                for(let key in element){
-                
-                    var c = document.createElement("span");
-                    c.innerHTML=JSON.stringify(element[key]);
-                    a.appendChild(c);
-                }
+            var childElement  = document.createElement("div");
+            childElement.id = "child" + i;
+            i++;
+            for(let key in jsonBody){
+                        var c = document.createElement("span");
+                        c.innerHTML=JSON.stringify(jsonBody[key]);
+                        childElement.appendChild(c);
+                    }
                 var d = document.createElement("button")
                 d.innerHTML="Delete";
-                d.addEventListener('click', () => deleteItem(element.id));
-                a.appendChild(d);
-                parentElement.appendChild(a);
-            });
+                d.addEventListener('click', () => deleteItem(jsonBody.id,childElement.id));
+                childElement.appendChild(d);
+                console.log(childElement.id);
+            // childElement.innerHTML=JSON.stringify(jsonBody);
+            parentElement.append(childElement);
         })
     })
-        })
-    })}
+            // parentElement.innerHTML='';
+            // jsonBody.forEach(element => {
+            //     var a = document.createElement("div");
+            //     a.id="child"
+            //     for(let key in element){
+                
+            //         var c = document.createElement("span");
+            //         c.innerHTML=JSON.stringify(element[key]);
+            //         a.appendChild(c);
+            //     }
+            //     var d = document.createElement("button")
+            //     d.innerHTML="Delete";
+            //     d.addEventListener('click', () => deleteItem(element.id));
+            //     a.appendChild(d);
+            //     parentElement.appendChild(a);
+            //     console.log(a.id);
+            // });
+        
+}
     window.onload =getData;
     
 </script>
 <body>
     <i>Id</i>
     <input type="number" id="id"></input>
+    <br>
     <i>Todo title</i>
     <input type="text" id="title"></input>
+    <br>
     <i>Description</i> 
     <input type="text" id="Description"></input>
+    
     <button onclick="onPress()">send todo</button>
     <div id="mainarea">
 

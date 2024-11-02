@@ -1,0 +1,85 @@
+<head>
+    <Title>
+        TODO
+    </Title>
+</head>
+<script>
+    var i=0;
+function createDomElement(){
+     var list=[];
+     var todos=[{
+        "id": "1",
+    "title": "Do it",
+    "description": "navanith"
+     },
+     {
+    "id": "2",
+    "title": "thiru",
+    "description": "navfef"
+  },
+  {
+    "id": "2",
+    "title": "ravii",
+    "description": "navfef"
+  }
+    ]
+    var parent = document.getElementById("mainarea");
+    todos.forEach(element => {
+       var bool = true;
+       var id = String(element.id).trim();
+       for(var k=0;k<parent.children.length;k++){
+        console.log(parent.children.length)
+        var child = parent.children[k];
+        var check = String(child.children[0].innerHTML).trim();
+        console.log(child.children[0].innerHTML)
+        console.log(id);
+        if(check===id){
+            console.log("noway");
+             list.push(child.id);
+             bool = false;
+             break;
+        }
+       }
+       console.log(bool)
+       if(bool){
+        var child = document.createElement("div");
+        child.id="child"+i;
+       for(let key in element){
+        var d = document.createElement("span");
+        d.innerHTML=element[key];
+        child.appendChild(d);
+    }
+    list.push(child.id);
+    console.log(child);
+    parent.appendChild(child);
+       }
+       i++;
+   });
+   for (var l = parent.children.length - 1; l >= 0; l--) {
+        var child = parent.children[l];
+        if (!list.includes(child.id)) {
+            parent.removeChild(child); // Remove child if not in the list
+        }
+    }
+//    window.setInterval(
+//     () => createDomElement(), 1000
+//    )
+
+}
+
+</script>
+<body>
+    <i>Id</i>
+    <input type="number" id="id"></input>
+    <br>
+    <i>Todo title</i>
+    <input type="text" id="title"></input>
+    <br>
+    <i>Description</i> 
+    <input type="text" id="Description"></input>
+    
+    <button onclick="createDomElement()">send todo</button>
+    <div id="mainarea">
+
+    </div>
+</body>

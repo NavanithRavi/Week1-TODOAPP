@@ -5,7 +5,7 @@ const bodyParser = require("body-parser")
 const app = express();
 const port = 3000;
 const path = require('path');
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 function checkFileArray(data){
     if(data.trim()===""){
@@ -24,20 +24,21 @@ function checkFile(data,res){
 }
 
 app.put('/update',(req,res)=>{
-    var items = req.body;
-    var oldid = req.body.oldid;
- //    var newid = req.body.newid;
- // //    console.log(oldid);
- // //    console.log(newid);
+    //  var item = JSON.parse(req.body);
+    var item = req.body
+    var id = req.body.id;
+   
+    console.log(id);
+    console.log(item);
     fs.readFile('file.json','utf-8',(err,data)=>{
      var check =checkFile(data, res);
      if(check===true){
          var jsonData = JSON.parse(data);
-         var index = jsonData.findIndex(value => value.id===oldid );
+         var index = jsonData.findIndex(value => value.id.trim()===id);
          if(index!=-1){
          // jsonData[index].id=newid;
-         for(let key in items){
-             jsonData[index][key]=items[key];
+         for(let key in item){
+             jsonData[index][key]=item[key];
          }
          var jsonstring = JSON.stringify(jsonData,null,2);
          fs.writeFile('file.json',jsonstring,(err)=>{
@@ -45,7 +46,7 @@ app.put('/update',(req,res)=>{
          })
          }
          else{
-             res.send("invalid Index");
+             res.send(id);
          }
      }
     })
@@ -56,18 +57,19 @@ app.delete('/delete',(req,res)=>{
   
     fs.readFile('file.json','utf-8',(err,data)=>{
         var check = checkFile(data,res);
+        
         if(check===true){
             // console.log(id);
             // console.log("I am inside the delete function");
-            // console.log(data);
-            var jsonData = JSON.parse(data);
-            var index = jsonData.findIndex(value => value.id===id);
             
-            if(index!=-1){
+            var jsonData = JSON.parse(data);
+            var index = jsonData.findIndex(value =>value.id.trim()===id);
+            console.log(index);
+            if(index!==-1){
                 console.log("I am inside the delete function");
                 jsonData.splice(index,1);
                 var updatedjson = JSON.stringify(jsonData,null,2);
-
+           
                 fs.writeFile('file.json',updatedjson,(err)=>{
                     if(err){
                         res.send("error");
@@ -80,7 +82,7 @@ app.delete('/delete',(req,res)=>{
                 })
             }
             else{
-                res.send("Invalid Index");
+                res.send("fucked");
             }
         }
     })
@@ -119,7 +121,7 @@ app.post('/put',(req,res)=>{
                     res.send("error occured");
                 }
                 else{
-                    res.send("Pushed");
+                    res.send(req.body);
                 }
             });
     });
